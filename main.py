@@ -1,7 +1,8 @@
 def print_menu():
     print("2. Determinarea celei mai lungi secvente cu proprietatea ca numerele sunt divizibile cu k.")
     print("3. Determinarea celei mai lungi secvente cu proprietatea ca numerele sunt in progresie aritmetica.")
-    print("4. Iesire")
+    print("4. Determinarea celei mai lungi secvente cu proprietatea ca produsul lor e impar.")
+    print("5. Iesire")
 
 
 def citire_date():
@@ -13,6 +14,32 @@ def citire_date():
     for x in range(n):
         l.append(int(input("l[" + str(x) + "]=")))
     return l
+
+
+def product_odd(l):
+    """
+    :param l: lista
+    :return: true daca produsul e nr impar, altfel False
+    """
+    produs = 1
+    for x in range(len(l)):
+        produs *= l[x]
+    if produs % 2 == 0:
+        return False
+    return True
+
+
+def get_longest_product_is_odd(lst):
+    """
+    :param lst: lista citita
+    :return: subsecventa maxima de numere al caror produs e impar
+    """
+    secvmax = []
+    for i in range(len(lst)):
+        for j in range(i, len(lst)):
+            if product_odd(lst[i:j + 1]) and len(secvmax) < len(lst[i:j + 1]):
+                secvmax = lst[i:j + 1]
+    return secvmax
 
 
 def element_div_k(ls, k):
@@ -32,10 +59,11 @@ def arithmetic_progression(lst):
     :param lst: reprezinta lista citita
     :return: daca True daca o subscventa este progresie aritmetica
     """
-    if(len(lst)>1):
-        ratia = lst[1]-lst[0]
+    ratia = 0
+    if (len(lst) > 1):
+        ratia = lst[1] - lst[0]
     for x in range(2, len(lst)):
-        if lst[x] - lst[x-1] != ratia:
+        if lst[x] - lst[x - 1] != ratia:
             return False
     return True
 
@@ -48,8 +76,8 @@ def get_longest_arithmetic_progression(lst):
     lista = []
     for i in range(len(lst)):
         for j in range(i, len(lst)):
-            if arithmetic_progression(lst[i:j+1]) and len(lista) < len(lst[i:j+1]):
-                lista = lst[i:j+1]
+            if arithmetic_progression(lst[i:j + 1]) and len(lista) < len(lst[i:j + 1]):
+                lista = lst[i:j + 1]
     return lista
 
 
@@ -73,6 +101,11 @@ def get_longest_div_k(lst, k):
     return subsecventa
 
 
+def test_get_longest_product_is_odd():
+    assert get_longest_product_is_odd([1, 7, 7]) == [1, 7, 7]
+    assert get_longest_product_is_odd([1, 3, 3]) == [1, 3, 3]
+    assert get_longest_product_is_odd([3, 3, 5]) == [3, 3, 5]
+
 def test_get_longest_div_k():
     assert get_longest_div_k([2, 4, 6, 7], 2) == [2, 4, 6]
     assert get_longest_div_k([1, 2, 3, 4], 1) == [1, 2, 3, 4]
@@ -92,16 +125,17 @@ def main():
                 k = int(input("Dati valoarea lui k: "))
                 print(f"Subsecventa maxima este: {get_longest_div_k(sir, k)}")
             elif optiune == '3':
-                print(f"Subscventa maxima este: {get_longest_arithmetic_progression(sir)}")
+                print(f"Subsecventa maxima este: {get_longest_arithmetic_progression(sir)}")
             elif optiune == '4':
+                print(f"Subsecventa maxima este: {get_longest_product_is_odd(sir)}")
+            elif optiune == '5':
                 return False
-        elif optiune == '4':
+        elif optiune == '5':
             return False
 
-
+test_get_longest_product_is_odd()
 test_get_longest_div_k()
 test_get_longest_arithmetic_progression()
-
 
 if __name__ == "__main__":
     main()
